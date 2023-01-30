@@ -154,12 +154,13 @@ def hf_dataset(
     def pre_process(examples):
         processed = {}
         processed[image_key] = [tform(im) for im in examples[image_column]]
-        [print(im.size) for im in examples[image_column]]
+        [print(torchvision.transforms.functional.get_image_num_channels(im) for im in examples[image_column]]
         processed[caption_key] = examples[text_column]
         return processed
 
     ds.set_transform(pre_process)
-    [print(tf.shape(im)) for im in ds]
+
+    # [print(tf.shape(im)) for im in ds]
     return ds
 
 class TextOnly(Dataset):
