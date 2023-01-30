@@ -75,6 +75,7 @@ class FolderData(Dataset):
         for e in ext:
             self.paths.extend(list(self.root_dir.rglob(f"*.{e}")))
         if isinstance(image_transforms, ListConfig):
+            print("inside image_transforms")
             image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
         image_transforms.extend([transforms.ToTensor(),
                                  transforms.Lambda(lambda x: rearrange(x * 2. - 1., 'c h w -> h w c'))])
@@ -105,6 +106,7 @@ class FolderData(Dataset):
         im = Image.open(filename)
         im = self.process_im(im)
         data["image"] = im
+        print(im)
 
         if self.captions is not None:
             data["txt"] = caption
