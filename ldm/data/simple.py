@@ -134,7 +134,7 @@ def hf_dataset(
     """Make huggingface dataset with appropriate list of transforms applied
     """
     def to_rgb(examples):
-        examples["pixel_values"] = [image.convert("RGB") for image in examples["image"]]
+        examples["image"] = [image.convert("RGB") for image in examples["image"]]
         return examples
 
     data_files = {'train': ['/content/clipart/train/**'], 'test': ['/content/clipart/test/**']}
@@ -146,6 +146,7 @@ def hf_dataset(
     image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
     image_transforms.extend([transforms.ToTensor(),
                                 transforms.Lambda(lambda x: rearrange(x * 2. - 1., 'c h w -> h w c'))])
+    tform = transforms.Compose(image_transforms)
 
     assert image_column in ds.column_names, f"Didn't find column {image_column} in {ds.column_names}"
     assert text_column in ds.column_names, f"Didn't find column {text_column} in {ds.column_names}"
