@@ -138,13 +138,14 @@ def hf_dataset(
         return examples
 
     data_files = {'train': ['/content/clipart/train/**'], 'test': ['/content/clipart/test/**']}
-    ds = load_dataset("imagefolder", data_files=data_files, split='train').with_transform(to_rgb)
+    ds = load_dataset("imagefolder", data_files=data_files, split='train')\
+    ds = ds.with_transform(to_rgb)
     print('data loaded')
+    print('first image', ds[0])
     # ds = load_dataset(name, split=split)
     image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
     image_transforms.extend([transforms.ToTensor(),
                                 transforms.Lambda(lambda x: rearrange(x * 2. - 1., 'c h w -> h w c'))])
-    tform = transforms.Compose(image_transforms)
 
     assert image_column in ds.column_names, f"Didn't find column {image_column} in {ds.column_names}"
     assert text_column in ds.column_names, f"Didn't find column {text_column} in {ds.column_names}"
