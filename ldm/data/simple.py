@@ -151,11 +151,10 @@ def hf_dataset(
     assert image_column in ds.column_names, f"Didn't find column {image_column} in {ds.column_names}"
     assert text_column in ds.column_names, f"Didn't find column {text_column} in {ds.column_names}"
 
-    from pytorch import torchvision
     def pre_process(examples):
         processed = {}
         processed[image_key] = [tform(im) for im in examples[image_column]]
-        [print(torchvision.transforms.functional.get_image_num_channels(im)) for im in examples[image_column]]
+        [print(transforms.functional.get_image_num_channels(im)) for im in examples[image_column]]
         processed[caption_key] = examples[text_column]
         return processed
 
