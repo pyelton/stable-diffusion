@@ -133,12 +133,12 @@ def hf_dataset(
     ):
     """Make huggingface dataset with appropriate list of transforms applied
     """
-    def transforms(examples):
+    def to_rgb(examples):
         examples["pixel_values"] = [image.convert("RGB") for image in examples["image"]]
         return examples
 
     data_files = {'train': ['/content/clipart/train/**'], 'test': ['/content/clipart/test/**']}
-    ds = load_dataset("imagefolder", data_files=data_files, split='train').with_transform(transforms)
+    ds = load_dataset("imagefolder", data_files=data_files, split='train').with_transform(to_rgb)
     print('data loaded')
     # ds = load_dataset(name, split=split)
     image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
