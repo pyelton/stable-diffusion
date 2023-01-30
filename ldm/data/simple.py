@@ -145,6 +145,7 @@ def hf_dataset(
     # ds = load_dataset(name, split=split)
     image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
     image_transforms.extend([transforms.ToTensor(),
+                             transforms.Lambda(lambda x: x[:3]),
                                 transforms.Lambda(lambda x: rearrange(x * 2. - 1., 'c h w -> h w c'))])
     tform = transforms.Compose(image_transforms)
 
