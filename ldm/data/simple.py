@@ -106,7 +106,7 @@ class FolderData(Dataset):
         im = Image.open(filename)
         im = self.process_im(im)
         data["image"] = im
-        print(im)
+        # print(im)
 
         if self.captions is not None:
             data["txt"] = caption
@@ -133,8 +133,13 @@ def hf_dataset(
     ):
     """Make huggingface dataset with appropriate list of transforms applied
     """
+    def transforms(examples):
+        examples["pixel_values"] = [image.convert("RGB") for image in examples["image"]]
+        return examples
+
     data_files = {'train': ['/content/clipart/train/**'], 'test': ['/content/clipart/test/**']}
-    ds = load_dataset("imagefolder", data_files=data_files, split='train')
+    ds = load_dataset("imagefolder", data_files=data_files, split='train').with_transform(transforms)
+    print('data loaded')
     # ds = load_dataset(name, split=split)
     image_transforms = [instantiate_from_config(tt) for tt in image_transforms]
     image_transforms.extend([transforms.ToTensor(),
