@@ -138,7 +138,7 @@ def hf_dataset(
         return examples
 
     data_files = {'train': ['/content/clipart/train/**'], 'test': ['/content/clipart/test/**']}
-    ds = load_dataset("imagefolder", data_files=data_files, split='train')\
+    ds = load_dataset("imagefolder", data_files=data_files, split='train')
     ds = ds.with_transform(to_rgb)
     print('data loaded')
     print('first image', ds[0])
